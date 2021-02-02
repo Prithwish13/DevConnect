@@ -1,5 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+require('dotenv').config();
 const app = express();
 
 //importing router
@@ -20,7 +23,15 @@ mongoose.connect(db.mongoUri,{useFindAndModify:false,useNewUrlParser:true,useUni
 })
 .catch(err=>console.log(err))
 
-app.get('/',(req,res)=>res.send('hello'));
+//passport middleware
+app.use(passport.initialize());
+
+//Passport Config
+require('./config/passport')(passport);
+
+//body-parser middlewere
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
 
 //use routes
 app.use('/api/user',userRoute);

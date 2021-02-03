@@ -3,8 +3,18 @@ const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const {validationResult} = require('express-validator');
 
 exports.registerUser = async (req,res,next) => {
+    let error = validationResult(req);
+    if(!error.isEmpty()){
+        let errObj={}
+        error = error.array();
+        for (let i of error){
+            errObj[i.param] = i.msg;
+        }
+        return res.status(400).json(errObj);
+    }
     try {
        const user = await User.findOne({email:req.body.email}); 
        if(user){
@@ -45,6 +55,16 @@ exports.registerUser = async (req,res,next) => {
 }
 
 exports.postLogin = async (req,res,next) => {
+ let error = validationResult(req);
+    if(!error.isEmpty()){
+        let errObj={}
+        error = error.array();
+        for (let i of error){
+            errObj[i.param] = i.msg;
+        }
+        return res.status(400).json(errObj);
+    } 
+
  const {email,password} = req.body;
 
 //Find the user by Email

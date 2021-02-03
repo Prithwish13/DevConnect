@@ -23,15 +23,17 @@ mongoose.connect(db.mongoUri,{useFindAndModify:false,useNewUrlParser:true,useUni
 })
 .catch(err=>console.log(err))
 
+//body-parser middlewere
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
+
+
 //passport middleware
 app.use(passport.initialize());
 
 //Passport Config
 require('./config/passport')(passport);
 
-//body-parser middlewere
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(bodyParser.json());
 
 //use routes
 app.use('/api/user',userRoute);

@@ -2,7 +2,6 @@ const User = require("../models/User")
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const passport = require('passport');
 const {validationResult} = require('express-validator');
 
 exports.registerUser = async (req,res,next) => {

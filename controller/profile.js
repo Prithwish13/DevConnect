@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Profile = require('../models/Profile');
 const {validationResult} = require('express-validator');
+const profile = require('../validation/profile');
 
 exports.getUserProfile = async (req,res,next) => {
   const errors = {};  
@@ -48,25 +49,7 @@ exports.createUserProfile = async (req,res,next) =>{
         }
     }
 
-    // if(req.body.handle) profileFields.handle=req.body.handle;
-    // if(req.body.company) profileFields.company=req.body.company;
-    // if(req.body.website) profileFields.website=req.body.website;
-    // if(req.body.location) profileFields.location=req.body.location;
-    // if(req.body.bio) profileFields.bio=req.body.bio;
-    // if(req.body.status) profileFields.status=req.body.status;
-    // if(req.body.githubUserName) profileFields.githubUserName = req.body.githubUserName;
-
-    //skills
-    // if (req.body.skills){
-    //     profileFields.skills = req.body.skills.split(',');
-    // }
-
-    //socials
-    // if(req.body.youtube) profileFields.social.youtube = req.body.youtube;
-    // if(req.body.twitter) profileFields.social.twitter = req.body.twitter;
-    // if(req.body.facebook) profileFields.social.facebook = req.body.facebook;
-    // if(req.body.linkedin) profileFields.social.linkedin = req.body.linkedin;
-    // if(req.body.instagram) profileFields.social.instagram = req.body.instagram;
+   
     
     //find the profile
 
@@ -98,4 +81,134 @@ exports.createUserProfile = async (req,res,next) =>{
     } catch (error) {
         console.log(error);
     }
+};
+
+exports.addExperience = async (req,res,next) =>{
+    let errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log('this is running')
+        let errObj={}
+        errors = errors.array();
+        for (let i of errors){
+            errObj[i.param] = i.msg;
+        }
+        return res.status(400).json(errObj);
+    }
+
+    try {
+    const userProfile = await Profile.findOne({user:req.user.id});
+    if(userProfile){
+        const newExp = {};
+        for(let field in req.body){
+            if(field==='title' || field ==='company' || field ==='location' || field ==='from' || field ==='to' || field ==='current' || field ==='description'){
+                newExp[field] = req.body[field]  ? req.body[field] : '';
+            }else{
+                continue;
+            }        
+        }
+      //adding the experience to the profile
+        userProfile.experience.unshift(newExp);
+        userProfile.save()
+        .then(result=>{
+            res.status(200).json(result)
+        })
+        .catch(err=>console.log(err));
+      }else {
+          res.status(400).json({
+              message : 'No profile found maybe create one'
+          })
+      } 
+    } catch (error) {
+        console.log(err);
+    }
+   
 }
+
+exports.addEducation = async (req,res,next) => {
+    let errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log('this is running')
+        let errObj={}
+        errors = errors.array();
+        for (let i of errors){
+            errObj[i.param] = i.msg;
+        }
+        return res.status(400).json(errObj);
+    }
+
+   try {
+    const userProfile = await Profile.findOne({user:req.user.id});
+    if(userProfile){
+        const newEdu = {};
+        for(let field in req.body){
+            if(field==='school' || field ==='degree' || field ==='fieldOfStudy' || field ==='from' || field ==='to' || field ==='current' || field ==='description'){
+                newEdu[field] = req.body[field]  ? req.body[field] : '';
+            }else{
+                continue;
+            }        
+        }
+      //adding the experience to the profile
+        userProfile.education.unshift(newEdu);
+        userProfile.save()
+        .then(result=>{
+            res.status(200).json(result)
+        })
+        .catch(err=>console.log(err));
+      }else {
+          res.status(400).json({
+              message : 'No profile found maybe create one'
+          })
+      } 
+    } catch (error) {
+        console.log(err);
+    } 
+}
+
+exports.removeExperience = async (req,res,next) =>{
+    const expId = req.params.id;
+    if(!expId){
+        return res.status(400).json({error:'Id not define'});
+    }
+    try {
+        const userProfile  = await Profile.findOne({user:req.user.id});
+        if(!userProfile){
+            return res.status(400).json({error:'no user profile found please try after login'});
+        }
+        const filterExp = userProfile.experience.filter(exp => exp._id.toString() !== expId.toString());
+        userProfile.experience = filterExp;
+        userProfile.save()
+            .then(result=>{
+                res.status(200).json(result);
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+exports.removeEducation = async (req,res,next) =>{
+    const eduId = req.params.id;
+    if(!eduId){
+        return res.status(400).json({error:'Id not define'});
+    }
+    try {
+        const userProfile  = await Profile.findOne({user:req.user.id});
+        if(!userProfile){
+            return res.status(400).json({error:'no user profile found please try after login'});
+        }
+        const filterEdu = userProfile.education.filter(edu => edu._id.toString() !== eduId.toString());
+        userProfile.education = filterEdu;
+        userProfile.save()
+            .then(result=>{
+                res.status(200).json(result);
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+    } catch (error) {
+        console.log(error)
+    }
+}
+

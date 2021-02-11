@@ -7,6 +7,7 @@ const {validationResult} = require('express-validator');
 exports.registerUser = async (req,res,next) => {
     let error = validationResult(req);
     if(!error.isEmpty()){
+        console.log('this is running')
         let errObj={}
         error = error.array();
         for (let i of error){

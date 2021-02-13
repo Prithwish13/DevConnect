@@ -4,7 +4,8 @@
 /.pnp
 .pnp.js
 .JPG
-
+/coverage
+/build
 .DS_Store
 .env.local
 .env.development.local

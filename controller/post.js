@@ -103,6 +103,30 @@ exports.updatePost = async (req,res,next) =>{
     }
 };
 
+exports.deletePost = async (req,res,next) => {
+   const {postId} = req.body;
+   try {
+       const post = await Post.findById(postId);
+   if(!post){
+     return res.status(400).json({
+         error:'No post found with that Id'
+     })
+   }
+   if(post.user.toString() !== req.user.id.toString()){
+     return res.status(400).json({
+            error:'You are not authorized'
+      }) 
+   }
+   removerFile(post.image);
+   const result = await post.remove();
+   res.status(200).json({
+       message:'Post deleted successfully',result:result
+   })
+   } catch (error) {
+       console.log(error);
+   }
+}
+
 exports.hitLike = async (req,res,next) => {
     const postId = req.params.postId;
     if(!postId){

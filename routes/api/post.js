@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const { getPosts,createPost,updatePost, hitLike, getComments, updateComment, postComment,deleteComment } = require('../../controller/post');
+const { getPosts,createPost,updatePost, hitLike, getComments, updateComment, postComment,deleteComment, deletePost } = require('../../controller/post');
 const { createPostValidator, commentValidator } = require('../../validation/postValidation');
 
 // @route GET api/posts
@@ -18,6 +18,11 @@ router.post('/create',passport.authenticate('jwt',{session:false}),createPostVal
 // @desc  creates a post 
 // @access private
 router.put('/update/:postId',passport.authenticate('jwt',{session:false}),createPostValidator,updatePost);
+
+// @route DELETE api/post/remove
+// @desc  creates a post 
+// @access private
+router.delete('/remove/:postId',passport.authenticate('jwt',{session:false}),deletePost);
 
 // @route GET api/post/like/:postId
 // @desc  likes a post 

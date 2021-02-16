@@ -1,7 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {useSelector,useDispatch} from 'react-redux';
+import { logout } from '../../Store/actions/authActions';
 
 export default function Header() {
+  const dispatch = useDispatch()
+  const isAuthenticated = useSelector(state=>state.auth.isAuthenticated);
     return (
         <div>
          <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
@@ -26,6 +30,14 @@ export default function Header() {
               <li className="nav-item">
                 <Link className="nav-link" to='/login'>Login</Link>
               </li>
+              {
+                isAuthenticated &&
+                <li className="nav-item">
+                <a className="nav-link" onClick={()=>{
+                  dispatch(logout())
+                }}>Logout</a>
+              </li>
+              }
             </ul>
            </div>
           </div>
@@ -33,3 +45,4 @@ export default function Header() {
         </div>
     )
 }
+

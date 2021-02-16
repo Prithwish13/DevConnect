@@ -5,6 +5,7 @@ const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
+const cors = require('cors');
 const app = express();
 
 //importing router
@@ -49,6 +50,7 @@ mongoose.connect(db.mongoUri,{useFindAndModify:false,useNewUrlParser:true,useUni
 //body-parser middlewere
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+app.use(cors());
 app.use('/images',express.static(path.join(__dirname,'images')));
 app.use(multer({storage:fileStorage,fileFilter:fileFilter}).single('image'));
 

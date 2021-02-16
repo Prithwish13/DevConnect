@@ -14,16 +14,16 @@ const TextFieldGroup = ({
     return (
              <div className="form-group">
                   <input type={type} className={classname("form-control form-control-lg",{
-                    "is-invalid":errors ? errors.email : false
+                    "is-invalid":errors ? errors[name] : false
                   })} 
                   placeholder={placeholder} name={name} 
                   value={value}
                   onChange={e=>setValue(e.target.value)}
                   />
                   {
-                      errors ? errors.email : false && 
+                  errors ? errors[name] : false && 
                   <div class="invalid-feedback">
-                    {errors.email}
+                    {errors[name]}
                   </div>
                   }
                   {

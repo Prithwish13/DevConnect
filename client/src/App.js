@@ -9,14 +9,32 @@ import Login from './components/auth/Login';
 import history from './history';
 import setAuthToken from './util/setAuthToken';
 import jwt_decode from 'jwt-decode';
-import { setUser } from './Store/actions/authActions';
+import { logout, setUser } from './Store/actions/authActions';
 import {useDispatch} from 'react-redux';
+import Dashboard from './components/dashboard/Dashboard';
+import { decode } from 'jsonwebtoken';
+import { clearCurrentProfile } from './Store/actions/profileActions';
 
 const App = () =>{
   const dispatch = useDispatch();
   if(localStorage.token){
+
+    //decode token and get user info
     const decode = jwt_decode(localStorage.token);
-    dispatch(setUser(decode))
+
+    //  setUser and isAuthenticated
+    dispatch(setUser(decode));
+  }
+  const currentTime = Date.now()/1000;
+  if(decode.exp < currentTime){
+    //LogOut the user
+    dispatch(logout());
+
+    //clear current profile
+    dispatch(clearCurrentProfile());
+
+    //redirect to login
+    window.location.href='/login';
   }
 
     return (
@@ -27,6 +45,7 @@ const App = () =>{
             <Route path='/' exact component={Landing} />
             <Route path='/register' exact component={Register}  />
             <Route path='/login' exact component={Login}  />
+            <Route path='/dashboard' exact component={Dashboard}  />
             </Switch>
             <Footer/>
        </div>

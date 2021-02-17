@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {useSelector,useDispatch} from 'react-redux';
 import { logout } from '../../Store/actions/authActions';
+import { clearCurrentProfile } from '../../Store/actions/profileActions';
 
 export default function Header() {
   const dispatch = useDispatch()
@@ -24,16 +25,17 @@ export default function Header() {
             </ul>
 
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
+             {!isAuthenticated &&<li className="nav-item">
                 <Link className="nav-link" to='/register'>Sign Up</Link>
-              </li>
-              <li className="nav-item">
+              </li>}
+              {!isAuthenticated && <li className="nav-item">
                 <Link className="nav-link" to='/login'>Login</Link>
-              </li>
+              </li>}
               {
                 isAuthenticated &&
                 <li className="nav-item">
                 <a className="nav-link" onClick={()=>{
+                  dispatch(clearCurrentProfile())
                   dispatch(logout())
                 }}>Logout</a>
               </li>

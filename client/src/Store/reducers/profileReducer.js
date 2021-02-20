@@ -1,4 +1,4 @@
-import { CLEAR_CURRENT_PROFILE, GET_PROFILE, PROFILE_LOADING } from "../actions/profileActions";
+import { CLEAR_CURRENT_PROFILE, CREATE_PROFILE, GET_PROFILE, PROFILE_LOADING } from "../actions/profileActions";
 
 const initialState = {
     profile:null,
@@ -23,8 +23,7 @@ export default (state=initialState,action) =>{
               return {
                   ...state,
                   profile:null
-              }  
-    
+              }
         default:
             return state;
     }

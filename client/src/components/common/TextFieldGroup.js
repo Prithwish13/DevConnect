@@ -9,7 +9,8 @@ const TextFieldGroup = ({
     info,
     setValue,
     disable,
-    value
+    value,
+    required
 }) => {
     return (
              <div className="form-group">
@@ -19,10 +20,11 @@ const TextFieldGroup = ({
                   placeholder={placeholder} name={name} 
                   value={value}
                   onChange={e=>setValue(e.target.value)}
+                  required={required?true:false}
                   />
                   {
                   errors ? errors[name] : false && 
-                  <div class="invalid-feedback">
+                  <div className="invalid-feedback">
                     {errors[name]}
                   </div>
                   }

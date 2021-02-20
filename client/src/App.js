@@ -14,6 +14,8 @@ import {useDispatch} from 'react-redux';
 import Dashboard from './components/dashboard/Dashboard';
 import { decode } from 'jsonwebtoken';
 import { clearCurrentProfile } from './Store/actions/profileActions';
+import PrivateRoute from './components/common/PrivateRoute';
+import CreateProfile from './components/create-profile/CreateProfile';
 
 const App = () =>{
   const dispatch = useDispatch();
@@ -42,10 +44,11 @@ const App = () =>{
         <div  >
             <Header/>
             <Switch>
-            <Route path='/' exact component={Landing} />
-            <Route path='/register' exact component={Register}  />
-            <Route path='/login' exact component={Login}  />
-            <Route path='/dashboard' exact component={Dashboard}  />
+              <Route path='/' exact component={Landing} />
+              <Route path='/register' exact component={Register}  />
+              <Route path='/login' exact component={Login}  />
+              <PrivateRoute component={Dashboard} path='/dashboard' exact/>
+              <PrivateRoute path='/create-profile' exact component={CreateProfile} />
             </Switch>
             <Footer/>
        </div>

@@ -3,6 +3,7 @@ const {validationResult} =require('express-validator');
 const { removerFile } = require("../helper/removeFile");
 
 exports.getPosts = async (req,res,next)=>{
+    
     try {
         const posts = await Post.find();
         if(!posts){
@@ -17,6 +18,7 @@ exports.getPosts = async (req,res,next)=>{
         console.log(error);
     }
 };
+
 
 exports.createPost = async (req,res,next)=>{
     let errors = validationResult(req);

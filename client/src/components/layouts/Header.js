@@ -22,9 +22,16 @@ export default function Header() {
                 <Link className="nav-link" to="profiles"> Developers
                 </Link>
               </li>
+              {
+              isAuthenticated && 
+               <li className="nav-item">
+                  <Link className="nav-link" to='/dashboard'>Dashboard</Link>
+               </li>
+              }
             </ul>
 
             <ul className="navbar-nav ml-auto">
+           
              {!isAuthenticated &&<li className="nav-item">
                 <Link className="nav-link" to='/register'>Sign Up</Link>
               </li>}

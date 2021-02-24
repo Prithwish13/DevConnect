@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Profile = require('../models/Profile');
+const User = require('../models/User');
 const {validationResult} = require('express-validator');
 const profile = require('../validation/profile');
 
@@ -101,7 +102,7 @@ exports.addExperience = async (req,res,next) =>{
         const newExp = {};
         for(let field in req.body){
             if(field==='title' || field ==='company' || field ==='location' || field ==='from' || field ==='to' || field ==='current' || field ==='description'){
-                newExp[field] = req.body[field]  ? req.body[field] : '';
+                newExp[field] = req.body[field]  ?? req.body[field] ;
             }else{
                 continue;
             }        
@@ -187,7 +188,7 @@ exports.removeExperience = async (req,res,next) =>{
         console.log(error);
     }
 }
-
+//Removing Education Qualification
 exports.removeEducation = async (req,res,next) =>{
     const eduId = req.params.id;
     if(!eduId){
@@ -212,3 +213,22 @@ exports.removeEducation = async (req,res,next) =>{
     }
 }
 
+//Delele Account
+exports.deleteAccount = async (req,res,next) => {
+    const {id} = req.user;
+    console.log(id);
+    try {
+      const profile = await Profile.findOne({user:id});
+      if(profile){
+         await profile.remove(); 
+      }
+      await User.findByIdAndDelete(id);
+      return res.status(200).json({
+          message:'Account Deleted successfully'
+      })
+    } catch (error) {
+       console.log(error); 
+    }    
+    
+          
+}

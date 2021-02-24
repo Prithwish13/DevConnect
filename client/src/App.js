@@ -16,6 +16,8 @@ import { decode } from 'jsonwebtoken';
 import { clearCurrentProfile } from './Store/actions/profileActions';
 import PrivateRoute from './components/common/PrivateRoute';
 import CreateProfile from './components/create-profile/CreateProfile';
+import EditProfile from './components/edit-profile/EditProfile';
+import AddExperience from './components/add-credencials/AddExperience';
 
 const App = () =>{
   const dispatch = useDispatch();
@@ -49,6 +51,8 @@ const App = () =>{
               <Route path='/login' exact component={Login}  />
               <PrivateRoute component={Dashboard} path='/dashboard' exact/>
               <PrivateRoute path='/create-profile' exact component={CreateProfile} />
+              <PrivateRoute path='/edit-profile' exact component={EditProfile} />
+              <PrivateRoute path='/add-experience' exact component={AddExperience} />
             </Switch>
             <Footer/>
        </div>

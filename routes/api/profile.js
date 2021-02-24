@@ -3,8 +3,9 @@ const router = express.Router();
 const profileValidator = require('../../validation/profile');
 const experiencevalidator = require('../../validation/experience');
 const educationValidator = require('../../validation/education');
-const { getUserProfile,createUserProfile,addExperience,addEducation,removeExperience,removeEducation } = require('../../controller/profile');
+const { getUserProfile,createUserProfile,addExperience,addEducation,removeExperience,removeEducation,deleteAccount } = require('../../controller/profile');
 const passport =  require('passport');
+const { Passport } = require('passport');
 
 // @route GET api/profile
 // @desc  get user profile
@@ -35,5 +36,10 @@ router.delete('/experience/:id',passport.authenticate('jwt',{session:false}),rem
 // @desc  delete education based on Id
 // @access Private
 router.delete('/education/:id',passport.authenticate('jwt',{session:false}),removeEducation);
+
+// @route DELETE api/profile/:id
+// @desc  delete account based on Id
+// @access Private
+router.delete('/',passport.authenticate('jwt',{session:false}),deleteAccount);
 
 module.exports=router;

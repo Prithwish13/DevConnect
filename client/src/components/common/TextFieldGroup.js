@@ -21,6 +21,7 @@ const TextFieldGroup = ({
                   value={value}
                   onChange={e=>setValue(e.target.value)}
                   required={required?true:false}
+                  disabled={disable}
                   />
                   {
                   errors ? errors[name] : false && 

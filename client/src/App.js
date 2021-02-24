@@ -18,6 +18,7 @@ import PrivateRoute from './components/common/PrivateRoute';
 import CreateProfile from './components/create-profile/CreateProfile';
 import EditProfile from './components/edit-profile/EditProfile';
 import AddExperience from './components/add-credencials/AddExperience';
+import AddEducation from './components/add-credencials/AddEducation';
 
 const App = () =>{
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ const App = () =>{
               <PrivateRoute path='/create-profile' exact component={CreateProfile} />
               <PrivateRoute path='/edit-profile' exact component={EditProfile} />
               <PrivateRoute path='/add-experience' exact component={AddExperience} />
+              <PrivateRoute path='/add-education' exact component={AddEducation} />
             </Switch>
             <Footer/>
        </div>

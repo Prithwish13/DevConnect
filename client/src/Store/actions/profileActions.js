@@ -67,6 +67,19 @@ export const addExperience = (formData) => async dispatch => {
     }
 }
 
+//add education
+export const addEducation = (formData) => async dispatch => {
+    try {
+       await api.post('/profile/education',formData,{headers:{'Authorization':'Bearer '+localStorage.getItem('token')}});
+       history.push('/dashboard'); 
+    } catch (error) {   
+        dispatch({
+            type:ERRORS,
+            payload:error.response.data
+        })
+    }
+};
+
 //Delete account & profile
 export const deleteAccount = () => async dispatch =>{
     if(window.confirm('Are you sure want delete Account?')){

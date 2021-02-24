@@ -33,6 +33,11 @@ const AddExperience = () => {
       })) 
    }
 
+   const onCheck = () => {
+     setCurrent(prev=>!prev);
+     setDisabled(prev=>!prev);
+   }
+
    return (
       <div className="add-experience">
         <div className="container">
@@ -52,21 +57,21 @@ const AddExperience = () => {
                   name="company"
                   value={company}
                   setValue={setCompany}
-                  error={errors}
+                  errors={errors}
                 />
                 <TextFieldGroup
                   placeholder="* Job Title"
                   name="title"
                   value={title}
                   setValue={setTitle}
-                  error={errors}
+                  errors={errors}
                 />
                 <TextFieldGroup
                   placeholder="Location"
                   name="location"
                   value={location}
                   setValue={setLocation}
-                  error={errors}
+                  errors={errors}
                 />
                 <h6>From Date</h6>
                 <TextFieldGroup
@@ -74,7 +79,7 @@ const AddExperience = () => {
                   type="date"
                   value={from}
                   setValue={setFrom}
-                  error={errors}
+                  errors={errors}
                 />
                 <h6>To Date</h6>
                 <TextFieldGroup
@@ -83,7 +88,7 @@ const AddExperience = () => {
                   value={to}
                   setValue={setTo}
                   error={errors}
-                  disabled={disabled ? 'disabled' : ''}
+                  disable={disabled}
                 />
                 <div className="form-check mb-4">
                   <input
@@ -92,7 +97,7 @@ const AddExperience = () => {
                     name="current"
                     value={current}
                     checked={current}
-                    
+                    onChange={onCheck}
                     id="current"
                   />
                   <label htmlFor="current" className="form-check-label">

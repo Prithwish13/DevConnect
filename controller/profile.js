@@ -143,7 +143,7 @@ exports.addEducation = async (req,res,next) => {
         const newEdu = {};
         for(let field in req.body){
             if(field==='school' || field ==='degree' || field ==='fieldOfStudy' || field ==='from' || field ==='to' || field ==='current' || field ==='description'){
-                newEdu[field] = req.body[field]  ? req.body[field] : '';
+                newEdu[field] = req.body[field]  ?? req.body[field] ;
             }else{
                 continue;
             }        

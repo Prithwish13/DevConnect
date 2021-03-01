@@ -6,6 +6,7 @@ import {deleteAccount} from '../../Store/actions/profileActions';
 import Spinner from '../common/Spinner';
 import {Link} from 'react-router-dom';
 import ProfileDisplayAction from './ProfileDisplayAction';
+import Experience from './Experience';
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -36,6 +37,8 @@ const Dashboard = () => {
                 Welcome <Link to={`/profile/${profile.handle}`}>{user.name}
                 </Link></p>
                 <ProfileDisplayAction/>
+                <Experience experiences={profile.experience} 
+                />
                 <div style={{marginBottom:'60px'}}>
                     <button
                      className="btn btn-danger"

@@ -7,6 +7,7 @@ import Spinner from '../common/Spinner';
 import {Link} from 'react-router-dom';
 import ProfileDisplayAction from './ProfileDisplayAction';
 import Experience from './Experience';
+import Education from './Education';
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const Dashboard = () => {
                 <ProfileDisplayAction/>
                 <Experience experiences={profile.experience} 
                 />
+                <Education educations={profile.education} />
                 <div style={{marginBottom:'60px'}}>
                     <button
                      className="btn btn-danger"

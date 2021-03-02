@@ -95,6 +95,24 @@ export const removeExperience = (id) => async dispatch => {
             payload:error.response.data
         })
     }
+};
+
+//remove Experience
+export const removeEducation = (id) => async dispatch => {
+    try {
+        const {data} = await api.delete('/profile/education/'+id,{headers:{'Authorization':'Bearer '+localStorage.getItem('token')}});
+
+        dispatch({
+            type:GET_PROFILE,
+            payload:data
+        });
+
+    } catch (error) {
+        dispatch({
+            type:ERRORS,
+            payload:error.response.data
+        });
+    }
 }
 
 //Delete account & profile

@@ -80,4 +80,7 @@ app.use("/api/user", userRoute);
 app.use("/api/profile", profileRoute);
 app.use("/api/post", postRoute);
 
+//require in the caching file
+require("./helper/cache");
+
 app.listen(port);

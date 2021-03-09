@@ -5,32 +5,35 @@ const { validationResult } = require("express-validator");
 const profile = require("../validation/profile");
 const redis = require("redis");
 const util = require("util");
+const redisUrl = "redis://127.0.0.1:6379";
 
 exports.getUserProfile = async (req, res, next) => {
   const errors = {};
-  const redisUrl = "redis://127.0.0.1:6379";
-  const client = redis.createClient(redisUrl);
-  client.on("error", (error) => console.log(error));
-  const getAsync = util.promisify(client.get).bind(client);
+  // const client = redis.createClient(redisUrl);
+  // client.on("error", (error) => console.log(error));
+  // const getAsync = util.promisify(client.get).bind(client);
   //console.log(client);
   try {
     //Do we have any cached data in redis related
     //to this query
-    const cachedProfile = await getAsync(req.user.id);
+    // const cachedProfile = await getAsync(req.user.id);
 
-    //if yes, then respond to the request right away and return
-    if (cachedProfile) {
-      console.log("serving from cache");
-      return res.status(200).json(JSON.parse(cachedProfile));
-    }
+    //if yes, then respond to the request right 4
+
+    // if (cachedProfile) {
+    //   console.log("serving from cache");
+    //   return res.status(200).json(JSON.parse(cachedProfile));
+    // }
     //if no, we need to respond to request and update the cache to store the data
-    console.log("serving from database");
-    const profile = await Profile.findOne({ user: req.user.id });
+    const profile = await Profile.findOne({ user: req.user.id }).cache({
+      key: req.user.id,
+    });
     if (!profile) {
       errors.noProfile = "There is no profile for this user";
       return res.status(404).json(errors);
     }
-    client.set(req.user.id, JSON.stringify(profile));
+    // client.set(req.user.id, JSON.stringify(profile));
+    // client.off("error", (err) => console.log(err));
     res.status(200).json(profile);
   } catch (error) {
     res.status(500).json(error);
@@ -149,6 +152,9 @@ exports.addExperience = async (req, res, next) => {
       userProfile
         .save()
         .then((result) => {
+          const client = redis.createClient(redisUrl);
+          client.on("error", (error) => console.log(error));
+          client.set(req.user.id, JSON.stringify(result));
           res.status(200).json(result);
         })
         .catch((err) => console.log(err));
@@ -198,6 +204,9 @@ exports.addEducation = async (req, res, next) => {
       userProfile
         .save()
         .then((result) => {
+          const client = redis.createClient(redisUrl);
+          client.on("error", (error) => console.log(error));
+          client.set(req.user.id, JSON.stringify(result));
           res.status(200).json(result);
         })
         .catch((err) => console.log(err));
@@ -230,6 +239,9 @@ exports.removeExperience = async (req, res, next) => {
     userProfile
       .save()
       .then((result) => {
+        const client = redis.createClient(redisUrl);
+        client.on("error", (error) => console.log(error));
+        client.set(req.user.id, JSON.stringify(result));
         res.status(200).json(result);
       })
       .catch((err) => {
@@ -259,6 +271,9 @@ exports.removeEducation = async (req, res, next) => {
     userProfile
       .save()
       .then((result) => {
+        const client = redis.createClient(redisUrl);
+        client.on("error", (error) => console.log(error));
+        client.set(req.user.id, JSON.stringify(result));
         res.status(200).json(result);
       })
       .catch((err) => {

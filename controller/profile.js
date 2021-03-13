@@ -6,6 +6,7 @@ const profile = require("../validation/profile");
 const redis = require("redis");
 const util = require("util");
 const redisUrl = "redis://127.0.0.1:6379";
+const { clearHash } = require("../helper/cache");
 
 exports.getUserProfile = async (req, res, next) => {
   const errors = {};
@@ -152,10 +153,8 @@ exports.addExperience = async (req, res, next) => {
       userProfile
         .save()
         .then((result) => {
-          const client = redis.createClient(redisUrl);
-          client.on("error", (error) => console.log(error));
-          client.set(req.user.id, JSON.stringify(result));
           res.status(200).json(result);
+          clearHash(req.user.id);
         })
         .catch((err) => console.log(err));
     } else {
@@ -204,10 +203,8 @@ exports.addEducation = async (req, res, next) => {
       userProfile
         .save()
         .then((result) => {
-          const client = redis.createClient(redisUrl);
-          client.on("error", (error) => console.log(error));
-          client.set(req.user.id, JSON.stringify(result));
           res.status(200).json(result);
+          clearHash(req.user.id);
         })
         .catch((err) => console.log(err));
     } else {
@@ -239,10 +236,8 @@ exports.removeExperience = async (req, res, next) => {
     userProfile
       .save()
       .then((result) => {
-        const client = redis.createClient(redisUrl);
-        client.on("error", (error) => console.log(error));
-        client.set(req.user.id, JSON.stringify(result));
         res.status(200).json(result);
+        clearHash(req.user.id);
       })
       .catch((err) => {
         console.log(err);
@@ -271,9 +266,6 @@ exports.removeEducation = async (req, res, next) => {
     userProfile
       .save()
       .then((result) => {
-        const client = redis.createClient(redisUrl);
-        client.on("error", (error) => console.log(error));
-        client.set(req.user.id, JSON.stringify(result));
         res.status(200).json(result);
       })
       .catch((err) => {
@@ -294,6 +286,7 @@ exports.deleteAccount = async (req, res, next) => {
       await profile.remove();
     }
     await User.findByIdAndDelete(id);
+    clearHash(req.user.id);
     return res.status(200).json({
       message: "Account Deleted successfully",
     });

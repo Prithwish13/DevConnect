@@ -11,6 +11,7 @@ const {
   removeExperience,
   removeEducation,
   deleteAccount,
+  updateEducation,
 } = require("../../controller/profile");
 const passport = require("passport");
 const { Passport } = require("passport");
@@ -81,6 +82,17 @@ router.delete(
   "/",
   passport.authenticate("jwt", { session: false }),
   deleteAccount
+);
+
+// @route Put api/profile/education/:educationId
+// @desc  Update education details
+// @access Private
+
+router.put(
+  "/education/:educationId",
+  passport.authenticate("jwt", { session: false }),
+  educationValidator,
+  updateEducation
 );
 
 module.exports = router;

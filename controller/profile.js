@@ -294,3 +294,63 @@ exports.deleteAccount = async (req, res, next) => {
     console.log(error);
   }
 };
+
+//updating the Education
+exports.updateEducation = async (req, res, next) => {
+  const educationId = req.params.educationId;
+  const { id } = req.user;
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log("this is running");
+    let errObj = {};
+    errors = errors.array();
+    for (let i of errors) {
+      errObj[i.param] = i.msg;
+    }
+    return res.status(400).json(errObj);
+  }
+  try {
+    const profile = await Profile.findOne({ user: id });
+    if (!profile) {
+      return res
+        .status(400)
+        .json({ error: "no user profile found please try after login" });
+    }
+    const educationIndex = profile.education.findIndex(
+      (edu) => edu._id.toString() === educationId.toString()
+    );
+    if (educationIndex < 0) {
+      return res.status(400).json({ error: "no Education Found with that Id" });
+    }
+
+    const newEdu = {};
+    for (let field in req.body) {
+      if (
+        field === "school" ||
+        field === "degree" ||
+        field === "fieldOfStudy" ||
+        field === "from" ||
+        field === "to" ||
+        field === "current" ||
+        field === "description"
+      ) {
+        newEdu[field] = req.body[field] ?? req.body[field];
+      } else {
+        continue;
+      }
+    }
+    newEdu._id = profile.education[educationIndex]._id;
+    profile.education[educationIndex] = newEdu;
+    profile
+      .save()
+      .then((result) => {
+        clearHash(req.user.id);
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
